@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 
 import Image from "next/image";
 import styles from "./page.module.css";
@@ -23,6 +23,29 @@ function randomInteger(min: number, max: number): string {
   return Math.floor(rand).toString();
 }
 
+const ratingDescriptions: Object[] = [
+  {
+    color: "red",
+    text: "Очень низкий",
+  },
+  {
+    color: "red",
+    text: "Низкий",
+  },
+  {
+    color: "",
+    text: "Средний",
+  },
+  {
+    color: "green",
+    text: "Высокий",
+  },
+  {
+    color: "green",
+    text: "Очень высокий",
+  },
+];
+
 interface Predict {
   prediction1: string;
   prediction2: string;
@@ -33,11 +56,8 @@ export default function Home() {
 
   const [predict, setPredict] = useState<Predict>();
   const [isLoading, setLoading] = useState(true);
-
   const [text, setText] = useState(data.report);
-
   const [file, setFile] = useState();
-
   const [randNum, setRandNum] = useState("");
 
   useEffect(() => {
@@ -77,29 +97,6 @@ export default function Home() {
     });
   };
 
-  const ratingDescriptions: Object[] = [
-    {
-      color: "red",
-      text: "Очень низкий",
-    },
-    {
-      color: "red",
-      text: "Низкий",
-    },
-    {
-      color: "",
-      text: "Средний",
-    },
-    {
-      color: "green",
-      text: "Высокий",
-    },
-    {
-      color: "green",
-      text: "Очень высокий",
-    },
-  ];
-
   const handleClick = async () => {
     setLoading(true);
 
@@ -114,7 +111,7 @@ export default function Home() {
         setPredict(data);
         setLoading(false);
       });
-  }
+  };
 
   const sendFile = async (e: any) => {
     setLoading(true);
@@ -136,7 +133,7 @@ export default function Home() {
         setPredict(data);
         setLoading(false);
       });
-  }
+  };
 
   return (
     <main className={styles.main}>
@@ -144,12 +141,21 @@ export default function Home() {
         <Row className="mb-3">
           <Col className="bordered">
             <h3 className="mb-0">
-              <Row className="justify-content-between">
+              <Row>
                 {/* <Col xs="4">{data.company}</Col> */}
-                <Col xs="4" >Рейтинг: <span style={{ color: "green" }}>{predict ? predict.prediction1[0] : ''}</span></Col>
+                <Col xs="4">
+                  Рейтинг:{" "}
+                  <span style={{ color: "green" }}>
+                    {predict ? predict.prediction1[0] : ""}
+                  </span>
+                </Col>
+                <Col xs="4">
+                  <span> </span>Рейтинг 2:{" "}
+                  <span style={{ color: "green" }}>
+                    {predict ? predict.prediction2[0] : ""}
+                  </span>
+                </Col>
               </Row>
-              
-              
             </h3>
           </Col>
         </Row>
@@ -172,21 +178,32 @@ export default function Home() {
                       as="textarea"
                       rows={19}
                       value={text}
-                      onChange={e => setText(e.target.value)}
+                      onChange={(e) => setText(e.target.value)}
                     ></Form.Control>
-                    <Button variant="primary"
-                    disabled={isLoading}
-                    onClick={handleClick}
-                    >Отправить</Button>
+                    <Button
+                      variant="primary"
+                      disabled={isLoading}
+                      onClick={handleClick}
+                    >
+                      Отправить
+                    </Button>
                   </Tab>
                   <Tab eventKey="file" title="Файл">
                     <Form.Group controlId="formFileLg" className="mb-3">
                       <Form.Label>Выберите файл</Form.Label>
-                      <Form.Control type="file" size="lg" value={file} onChange={e => setText(e.target.value)}/>
-                      <Button variant="primary"
-                    disabled={isLoading}
-                    onClick={sendFile}
-                    >Отправить</Button>
+                      <Form.Control
+                        type="file"
+                        size="lg"
+                        value={file}
+                        onChange={(e) => setText(e.target.value)}
+                      />
+                      <Button
+                        variant="primary"
+                        disabled={isLoading}
+                        onClick={sendFile}
+                      >
+                        Отправить
+                      </Button>
                     </Form.Group>
                   </Tab>
                 </Tabs>
